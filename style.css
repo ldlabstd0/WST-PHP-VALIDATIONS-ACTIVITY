@@ -1,0 +1,405 @@
+/* 1. GLOBAL VARIABLES & THEME SETUP
+   
+   CSS Variables (Custom Properties) allow you to store site-wide design 
+   tokens (colors, fonts, borders) in one place for easy updating. */
+:root {
+  /* Dark Photography Theme Palette */
+  --ink: #1B1A17;              /* Deep black main background */
+  --ink-soft: #2A2824;         /* Soft dark shade for cards and containers */
+  --ivory: #F2EDE4;            /* Off-white primary text color */
+  --amber: #C98A3B;            /* Warm gold/amber accent for buttons & icons */
+  --sage: #7C8B6F;             /* Muted green secondary accent color */
+  --grey: #9B9488;             /* Muted grey for body text and subheadings */
+  --hair: rgba(242, 237, 228, 0.14); /* Subtle transparent white for borders */
+}
+
+/* Universal Box Sizing: Ensures padding and borders are calculated inside 
+   an element's total width/height, preventing broken layouts. */
+* {
+  box-sizing: border-box;
+}
+
+/* Base Body Styles */
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Heading Typography Setup */
+h1, h2, h3, .display-font {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Default Link Reset */
+a {
+  color: inherit;
+}
+
+/* Centered Layout Wrapper with Side Padding */
+.container-narrow {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+
+/* 2. NAVIGATION BAR */
+.nav-strip {
+  border-bottom: 1px solid var(--hair);
+}
+
+.nav-strip .brand {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.nav-strip .brand span {
+  color: var(--amber);
+}
+
+.nav-strip .nav-link-custom {
+  color: var(--grey);
+  text-decoration: none;
+  font-size: 0.92rem;
+  margin-left: 0;
+  transition: color 0.2s ease;
+}
+
+.nav-strip .nav-link-custom:hover {
+  color: var(--ivory);
+}
+
+/* Compact button variant used for smaller inline controls (e.g., Logout) */
+.btn-sm {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+}
+
+
+/* 3. HERO SECTION & BUTTONS */
+.hero {
+  padding: 5.5rem 0 4.5rem;
+  position: relative;
+}
+
+/* Welcome banner shown above hero headline when a user is logged in */
+.welcome-banner {
+  color: var(--amber);
+  font-family: 'Fraunces', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.75rem;
+}
+
+/* Hides empty welcome elements so they don't leave extra spacing */
+.welcome-banner:empty {
+  display: none;
+}
+
+/* Fluid Typography: clamp(MIN, PREFERRED, MAX) smoothly scales font size based on screen width */
+.hero h1 {
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+  line-height: 1.12;
+  max-width: 11ch; /* Limits headline width to roughly 11 character widths */
+}
+
+.hero p.lede {
+  color: var(--grey);
+  font-size: 1.08rem;
+  max-width: 42ch;
+  margin-top: 1.4rem;
+}
+
+/* Common Base Styles for Action Buttons */
+.btn-amber,
+.btn-outline-ivory {
+  padding: 0.72rem 1.5rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Primary Solid Amber Button */
+.btn-amber {
+  background: var(--amber);
+  border: 1px solid var(--amber);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.btn-amber:hover {
+  background: #B87A2C;
+  border-color: #B87A2C;
+  color: var(--ink);
+}
+
+/* Secondary Outlined Ivory Button */
+.btn-outline-ivory {
+  background: transparent;
+  border: 1px solid var(--hair);
+  color: var(--ivory);
+}
+
+.btn-outline-ivory:hover {
+  border-color: var(--ivory);
+  color: var(--ivory);
+}
+
+
+/* 4. CONTACT SHEET (Hero Visual Frames) */
+.contact-sheet {
+  background: var(--ink-soft);
+  border: 1px solid var(--hair);
+  padding: 1.1rem;
+  position: relative;
+}
+
+/* Creates decorative top and bottom film-perforation dots using repeated gradients */
+.contact-sheet::before,
+.contact-sheet::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background-image: radial-gradient(circle, var(--ink) 3px, transparent 3.2px);
+  background-size: 22px 14px;
+  background-repeat: repeat-x;
+  background-position: 6px center;
+}
+
+.contact-sheet::before { top: -1px; }
+.contact-sheet::after  { bottom: -1px; }
+
+/* Individual Photo Frame Style */
+.frame {
+  aspect-ratio: 4 / 5; /* Maintains a consistent 4:5 vertical proportion */
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: flex-end;
+  padding: 0.6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner subtle border effect */
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+/* Image styling inside photo frames */
+.frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Crops image to fill container without distortion */
+  z-index: 1;
+}
+
+.frame img::before {
+  content: "";
+}
+
+/* Hides broken or missing image elements so gradient fallback shows instead */
+.frame img:not([src]), 
+.frame img[src=""] {
+  display: none;
+}
+
+/* Caption label pinned over the frame */
+.frame span {
+  font-size: 0.75rem;
+  color: var(--ivory);
+  background: rgba(27, 26, 23, 0.55);
+  padding: 0.15rem 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Dark gradient fallbacks for photo frames before image loads */
+.frame.f1 { background: linear-gradient(160deg, #4a4236, #221f1b 70%); }
+.frame.f2 { background: linear-gradient(160deg, #3e4a3c, #1c211b 70%); }
+.frame.f3 { background: linear-gradient(160deg, #4a3a2e, #211a15 70%); }
+.frame.f4 { background: linear-gradient(160deg, #39424a, #181c21 70%); }
+
+.sheet-caption {
+  color: var(--grey);
+  font-size: 0.85rem;
+  margin-top: 0.9rem;
+}
+
+
+/* 5. GENERAL SECTION HEADERS */
+.section {
+  padding: 4.5rem 0;
+  border-top: 1px solid var(--hair);
+}
+
+.section h2 {
+  font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+  max-width: 16ch;
+}
+
+.section .section-sub {
+  color: var(--grey);
+  max-width: 56ch;
+  margin-top: 0.85rem;
+}
+
+
+/* 6. OBJECTIVES SECTION (Why Rows) */
+.why-row {
+  border-top: 1px solid var(--hair);
+  padding: 1.6rem 0;
+  display: flex;
+  gap: 2rem;
+}
+
+.why-row:last-child {
+  border-bottom: 1px solid var(--hair);
+}
+
+/* Number mark or icon prefix */
+.why-row .mark {
+  color: var(--amber);
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  min-width: 2.4rem;
+}
+
+.why-row h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.35rem;
+}
+
+.why-row p {
+  color: var(--grey);
+  margin: 0;
+  max-width: 60ch;
+}
+
+
+/* 7. FUNCTIONALITY COLUMNS (Cards) */
+.func-card {
+  border: 1px solid var(--hair);
+  padding: 1.8rem 1.6rem;
+  height: 100%;
+}
+
+.func-card h3 {
+  font-size: 1.2rem;
+  color: var(--amber);
+  margin-bottom: 1rem;
+}
+
+.func-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.func-card li {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--hair);
+  color: var(--ivory);
+  font-size: 0.95rem;
+}
+
+.func-card li:first-child {
+  border-top: none;
+}
+
+
+/* 8. TARGET CLIENT SECTION */
+.target-band {
+  background: var(--ink-soft);
+}
+
+.target-item {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+}
+
+/* Colored bullet point indicator */
+.target-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sage);
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+}
+
+.target-item h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+
+.target-item p {
+  color: var(--grey);
+  margin: 0;
+}
+
+
+/* 9. CALL TO ACTION & FOOTER */
+.cta-band {
+  text-align: center;
+  padding: 5rem 0;
+}
+
+.cta-band h2 {
+  max-width: none;
+}
+
+footer {
+  border-top: 1px solid var(--hair);
+  padding: 2.2rem 0;
+  color: var(--grey);
+  font-size: 0.85rem;
+}
+
+
+/* 10. MEDIA QUERIES & ACCESSIBILITY */
+
+/* Mobile Layout Responsive Adjustments (Under 768px) */
+@media (max-width: 767.98px) {
+  .hero {
+    padding: 3.5rem 0 3rem;
+  }
+
+  .why-row {
+    flex-direction: column; /* Stacks row items vertically on small screens */
+    gap: 0.4rem;
+  }
+
+  .cta-band {
+    padding: 3.5rem 0;
+  }
+}
+
+/* Accessibility: Disables animations and transitions if requested by OS settings */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Accessibility: Keyboard navigation focus indicators */
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}

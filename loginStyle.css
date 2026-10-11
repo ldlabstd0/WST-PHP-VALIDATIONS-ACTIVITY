@@ -1,0 +1,439 @@
+/* 1. GLOBAL VARIABLES & COLOR PALETTE
+
+   CSS Variables (Custom Properties) allow you to store values 
+   like colors and sizes in one place so you can reuse them easily. */
+:root {
+  /* Color Scheme (Dark Theme) */
+  --bg-0: #0e0c09;              /* Deepest background color */
+  --bg-1: #17130f;              /* Secondary background color */
+  --accent: #c89a5b;            /* Primary gold/warm accent color */
+  --accent-soft: #e9cf9d;       /* Lighter gold for hover states and links */
+  --text: #f3eee3;              /* Main text color (off-white) */
+  --text-muted: #b3a89a;        /* Secondary/subtle text color */
+  --danger: #e8a07a;            /* Error/alert color */
+
+  /* Glassmorphism Effect Colors */
+  --glass: rgba(255, 255, 255, 0.055);       /* Semi-transparent white card fill */
+  --glass-border: rgba(255, 255, 255, 0.14); /* Semi-transparent border */
+  --input-bg: rgba(255, 255, 255, 0.045);    /* Semi-transparent input background */
+  --input-border: rgba(255, 255, 255, 0.14);/* Default input border color */
+
+  /* Border Radius (Rounded Corners) */
+  --radius-card: 26px;   /* Large rounding for main cards */
+  --radius-field: 14px;  /* Medium rounding for form inputs & alerts */
+  --radius-pill: 999px;  /* Pill shape for buttons */
+}
+
+/* 2. GLOBAL RESETS & BASE STYLES */
+
+/* Universal Box Sizing: Ensures padding and borders are included 
+   in the element's total width and height (prevents layout breaking) */
+* {
+  box-sizing: border-box;
+}
+
+html, 
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-0);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased; /* Smoother text rendering on macOS/iOS */
+  overflow-x: hidden;                  /* Prevents horizontal scrolling */
+}
+
+a {
+  color: var(--accent-soft);
+}
+
+/* Accessibility: Clear visual outline when navigating using the Tab key */
+a:focus-visible,
+input:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* 3. BACKDROP & ANIMATED APERTURE GRAPHIC */
+
+/* Full-screen fixed background container */
+.backdrop {
+  position: fixed;
+  inset: 0; /* Shortcut for top: 0, right: 0, bottom: 0, left: 0 */
+  z-index: 0;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(200, 154, 91, 0.16), transparent 55%),
+    radial-gradient(circle at 78% 70%, rgba(120, 150, 190, 0.10), transparent 50%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 60%);
+}
+
+/* SVG noise overlay using a pseudo-element for subtle texture */
+.backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Rotating decorative background graphic */
+.aperture {
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  width: 620px;
+  height: 620px;
+  max-width: 80vw;
+  transform: translateY(-50%);
+  opacity: 0.55;
+  animation: spin 140s linear infinite;
+}
+
+/* Continuous rotation animation */
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Accessibility: Disables animation if user enabled "Reduce Motion" in OS settings */
+@media (prefers-reduced-motion: reduce) {
+  .aperture {
+    animation: none;
+  }
+}
+
+
+/* 4. LAYOUT STAGE & BRANDING BLOCK */
+
+/* Main layout wrapper holding the branding and the form card */
+.stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 7vh 6vw;
+}
+
+.brand-block {
+  max-width: 380px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Glowing dot accent next to brand name */
+.brand__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px 2px rgba(200, 154, 91, 0.65);
+}
+
+.tagline {
+  margin: 14px 0 0;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 32ch; /* Limits width to approximately 32 characters for readability */
+}
+
+
+/* 5. GLASSMORPHISM LOGIN CARD */
+
+/* Frosted glass container */
+.card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  padding: 38px 34px 32px;
+  /* Blurs background behind card for frosted glass look */
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.55);
+}
+
+.card h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 30px;
+  margin: 0 0 8px;
+  letter-spacing: 0.002em;
+}
+
+.card__sub {
+  margin: 0 0 26px;
+  color: var(--text-muted);
+  font-size: 14.5px;
+  line-height: 1.55;
+  max-width: 36ch;
+}
+
+
+/* 6. FORM INPUTS & FIELD STYLING */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 0 0 6px 4px;
+}
+
+/* Wrapper to position icons inside input fields */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-field);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  padding: 13px 44px 13px 16px; /* Right padding leaves space for internal icons */
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.input-wrap input::placeholder {
+  color: rgba(243, 238, 227, 0.32);
+}
+
+/* Active focus state for text inputs */
+.input-wrap input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 4px rgba(200, 154, 91, 0.16);
+}
+
+/* Base style for icons inside inputs */
+.input-wrap .icon,
+.input-wrap .icon-btn {
+  position: absolute;
+  right: 14px;
+  width: 18px;
+  height: 18px;
+  color: rgba(243, 238, 227, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Static Decorative Icons */
+.input-wrap .icon {
+  pointer-events: none; /* Mouse clicks pass through to the input */
+}
+
+/* Clickable Icon Button (e.g., Show/Hide Password Toggle) */
+.input-wrap .icon-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.input-wrap .icon-btn:hover {
+  color: var(--text);
+}
+
+.input-wrap .icon svg,
+.input-wrap .icon-btn svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Validation & Error States */
+.error-msg {
+  display: block;
+  color: var(--danger);
+  font-size: 12.5px;
+  margin: 6px 0 0 4px;
+}
+
+.input-wrap input.input-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px rgba(232, 160, 122, 0.14);
+}
+
+.alert-box {
+  background: rgba(232, 160, 122, 0.12);
+  border: 1px solid rgba(232, 160, 122, 0.4);
+  color: var(--danger);
+  font-size: 13.5px;
+  padding: 10px 14px;
+  border-radius: var(--radius-field);
+  margin-bottom: 18px;
+}
+
+/* Utility Class: Utility to hide elements dynamically via JavaScript */
+.d-none {
+  display: none !important;
+}
+
+.demo-hint {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+
+/* 7. CHECKBOX & BUTTON CONTROLS */
+
+/* Flex row used for "Remember Me" and "Forgot Password" link */
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.remember input {
+  accent-color: var(--accent); /* Colors native checkbox to match theme */
+  width: 15px;
+  height: 15px;
+}
+
+.row-between a,
+.switch a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.row-between a:hover,
+.switch a:hover {
+  text-decoration: underline;
+}
+
+/* Action Buttons */
+.btn {
+  margin-top: 6px;
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--bg-0);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--accent-soft);
+}
+
+.btn:active {
+  transform: translateY(1px); /* Slightly pushes button down when clicked */
+}
+
+/* Shared Disabled State for Buttons & Inputs */
+.input-wrap input:disabled,
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Footer link section (e.g., "Don't have an account? Sign up") */
+.switch {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+
+/* 8. MEDIA QUERIES & RESPONSIVE BREAKPOINTS */
+
+/* Desktop Layout (900px and wide screens) */
+@media (min-width: 900px) {
+  .stage {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7vw;
+  }
+}
+
+/* Tablet & Mobile Layouts (Under 900px) */
+@media (max-width: 899px) {
+  .aperture {
+    top: 14vh;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 360px;
+    opacity: 0.4;
+  }
+
+  /* Keyframe override to handle centered mobile horizontal alignment */
+  @keyframes spin {
+    to {
+      transform: translate(-50%, 0) rotate(360deg);
+    }
+  }
+
+  .brand-block {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .card {
+    max-width: 460px;
+  }
+}
+
+/* Small Mobile Screens (420px and below) */
+@media (max-width: 420px) {
+  .card {
+    padding: 30px 22px 26px;
+  }
+
+  .stage {
+    padding: 6vh 5vw;
+    gap: 28px;
+  }
+}
